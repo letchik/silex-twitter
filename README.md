@@ -16,7 +16,7 @@ You need vagrant, ansible and LXC (for Linux) or VirtualBox (for MacOS or Window
 ### Linux
 I provide instructions how to run example in Linux (with apt package manager):
 - clone repository to desired location
-```git clone git@github.com:letchik/silex-twitter.git .```
+```git clone git@github.com:letchik/silex-twitter.git```
 - change current directory ```cd silex-twitter```
 - ```sudo apt-get install vagrant ansible lxc```
 - ```vagrant plugin install vagrant-lxc```
@@ -36,12 +36,13 @@ Sorry, I have no Windows or MacOs machine right now, so I can't describe deploym
     - maximum length is 15.
 2. I use Twitter Application-only authentication (see [docs](https://dev.twitter.com/oauth/application-only)) in case of I don't know the case of use this api, and there was no information in task regarding user authentication
 3. I use SessionServiceProvider to store twitter api key, in case that I don't have any permanent repository to store Twitter API key and don't have user authentication. It's temporary solution; final solution depends on further requirements
-4. As Twitter Api returns tweet creation time in UTC, I suppose to get actual hour based on timezone at when user was registered. Just for fun :) It's not true hour, but there truth is out there :)
-5. Finally, I did everything based on development environment. This means that all development dependencies will be installed by ansible as well. There is no production mode yet. 
+4. As Twitter Api returns tweet creation time in UTC, I suppose to get actual hour based on timezone actual when user was registered. Just for fun :) It's not true hour, but the truth is out there :)
+5. Finally, I did everything based on development environment. This means that all development dependencies will be installed by ansible as well. There is no production mode. 
 
 ## Tests
 You can run tests either on your local or inside virtual machine. 
 To run tests on your local you should install composer and run composer install inside of working directory.
 To run tests in VM do nothing, but ```vagrant ssh``` and ```cd /var/www/twitter```
+
 After that just run ```vendor/bin/phpunit -c phpunit.xml.dist```
  
