@@ -10,4 +10,5 @@
   roles:
   - webserver
   - php-node
+  - geerlingguy.composer
   - twitter

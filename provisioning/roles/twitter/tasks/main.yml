@@ -11,3 +11,5 @@
   - restart php5-fpm
 - name: check git installed
   apt: name=git state=present update_cache=yes
+- name: Install composer dependencies
+  composer: working-dir=/var/www/twitter

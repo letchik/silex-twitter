@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Exception;
 use Silex\Application;
 use GuzzleHttp;
 use DateTime;
@@ -11,14 +12,18 @@ class HistogramController
 {
     public function histogram(Request $request, Application $app, $username)
     {
+        if (!$app['session']) {
+            throw new Exception('Session not initialized, please register SessionProvider');
+        }
+
         $twitterKey = $app['session']->get('twitter.bearer');
 
         $tweetsPerHour = [];
 
-        $currentMaxId = $maxId = 0;
+        $maxId = 0;
         do {
-
-            $tweets = $this->getTweets($twitterKey, $username, 200, $currentMaxId ?: '');
+            $currentMaxId = $maxId;
+            $tweets = $this->getTweets($twitterKey, $username, 200, $currentMaxId);
 
             foreach ($tweets as $tweet) {
                 $hour = $this->getTweetHour($tweet['created_at'], $tweet['user']['timezone']);
@@ -28,7 +33,7 @@ class HistogramController
                 }
 
                 $tweetsPerHour[$hour]++;
-                $query['max_id'] = $tweet['id'];
+                $maxId = $tweet['id'];
             }
 
 
@@ -40,15 +45,17 @@ class HistogramController
     protected function getTweets($apiKey, $username, $count = 10, $maxId = null)
     {
         $client = new GuzzleHttp\Client();
-
+        $query = [
+            'screen_name' => $username,
+            'count'       => $count,
+        ];
+        if ($maxId) {
+            $query['max_id'] = $maxId;
+        }
         $response = $client->get(
             'https://api.twitter.com/1.1/statuses/user_timeline.json',
             [
-                'query'   => [
-                    'screen_name' => $username,
-                    'count'       => $count,
-                    'maxId'       => $maxId
-                ],
+                'query'   => $query,
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiKey
                 ]

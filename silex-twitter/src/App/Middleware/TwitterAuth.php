@@ -11,7 +11,14 @@ class TwitterAuth
 {
     public function run(Request $request, Application $app)
     {
-        if (!$app['session']->has('twitter.bearer')) {  
+        if (!$app['session']) {
+            throw new Exception('Session not initialized, please register SessionProvider');
+        }
+
+        if (!$app['session']->has('twitter.bearer')) {
+            if (empty($app['parameters']['twitter'])) {
+                throw new Exception('Twitter Authentication parameters not set');
+            }
             $bearer = $app['parameters']['twitter']['key'] . ':' . $app['parameters']['twitter']['secret'];
             $bearerCredentials = base64_encode($bearer);
 
