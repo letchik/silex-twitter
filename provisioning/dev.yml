@@ -1,0 +1,13 @@
+---
+- hosts: all
+  vars:
+    http_port: 80
+    max_clients: 200
+    vhost: d
+    dev_mode: true
+  remote_user: vagrant
+  sudo: yes
+  roles:
+  - webserver
+  - php-node
+  - twitter

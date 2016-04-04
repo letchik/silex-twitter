@@ -1,0 +1,13 @@
+---
+- name: check php installed
+  apt: name=php5-fpm state=present
+- name: check php-pear installed
+  apt: name=php-pear state=present
+- name: check libyaml installed
+  apt: name=libyaml-dev state=present
+#- name: install pecl yaml
+#  command: pecl install -s yaml
+- name: copy php.ini
+  template: src=php.ini.j2 dest=/etc/php5/fpm/php.ini
+- name: start php
+  service: name=php5-fpm state=started

@@ -1,0 +1,13 @@
+---
+- name: copy nginx config
+  template: src=nginx-vhost.j2 dest=/etc/nginx/sites-available/twitter.{{ vhost }}.conf
+- name: create symlink for config
+  file: src=/etc/nginx/sites-available/twitter.{{vhost}}.conf dest=/etc/nginx/sites-enabled/twitter.{{vhost}}.conf state=link
+  notify:
+  - reload nginx
+- name: copy fpm-pool config
+  template: src=fpm-pool.j2 dest=/etc/php5/fpm/pool.d/twitter.{{ vhost }}.conf
+  notify:
+  - restart php5-fpm
+- name: check git installed
+  apt: name=git state=present update_cache=yes
