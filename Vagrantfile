@@ -8,6 +8,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define 'twitter' do |node|
 	node.vm.hostname = 'twitter.d'
+	config.hostsupdater.aliases = ['twitter.d']
 	node.vm.network "private_network", ip: "192.168.15.10", lxc__bridge_name: 'vlxcbr1'
   	node.vm.box = "fgrehm/trusty64-lxc"
 

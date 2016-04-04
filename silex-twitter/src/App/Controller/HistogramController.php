@@ -4,12 +4,22 @@ namespace App\Controller;
 use App\Exception;
 use Silex\Application;
 use GuzzleHttp;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Class HistogramController
+ * @package App\Controller
+ */
 class HistogramController
 {
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @param string $username
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function histogram(Request $request, Application $app, $username)
     {
         if (!$app['session']) {
@@ -26,7 +36,7 @@ class HistogramController
             $tweets = $this->getTweets($twitterKey, $username, 200, $currentMaxId);
 
             foreach ($tweets as $tweet) {
-                $hour = $this->getTweetHour($tweet['created_at'], $tweet['user']['timezone']);
+                $hour = $app['datetime.hour']($tweet['created_at'], $tweet['user']['utc_offset']);
 
                 if (empty($tweetsPerHour[$hour])) {
                     $tweetsPerHour[$hour] = 0;
@@ -38,6 +48,8 @@ class HistogramController
 
 
         } while ($maxId != $currentMaxId);
+
+        ksort($tweetsPerHour);
 
         return new JsonResponse($tweetsPerHour);
     }
@@ -64,10 +76,4 @@ class HistogramController
 
         return json_decode($response->getBody(), true);
     }
-
-    protected function getTweetHour($tweetTime, $timezone) {
-        $createAt = new DateTime($tweetTime, $timezone);
-        return $createAt->format('H');
-    }
-
 }

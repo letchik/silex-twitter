@@ -7,8 +7,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp;
 
+/**
+ * Middleware provides application-only Twitter auth and stores bearer in session
+ * Class TwitterAuth
+ * @package App\Middleware
+ */
 class TwitterAuth
 {
+    /**
+     * Main middleware method. Calls Twitter OAuth API to obtain new access token for further requests 
+     * and stores it in session. 
+     * 
+     * @param Request $request
+     * @param Application $app
+     * @throws Exception
+     */
     public function run(Request $request, Application $app)
     {
         if (!$app['session']) {
