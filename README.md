@@ -38,6 +38,7 @@ Sorry, I have no Windows or MacOs machine right now, so I can't describe deploym
 3. I use SessionServiceProvider to store twitter api key, in case that I don't have any permanent repository to store Twitter API key and don't have user authentication. It's temporary solution; final solution depends on further requirements
 4. As Twitter Api returns tweet creation time in UTC, I suppose to get actual hour based on timezone actual when user was registered. Just for fun :) It's not true hour, but the truth is out there :)
 5. Finally, I did everything based on development environment. This means that all development dependencies will be installed by ansible as well. There is no production mode. 
+6. Actually this is not the best solution. It's better to store previous results of API calls and every time fetch only newer tweets based on max ID for current user. But as proof of concept I decided not to use database or other persistent storage. I hope this is enough. If not I can improve it.
 
 ## Tests
 You can run tests either on your local or inside virtual machine. 
