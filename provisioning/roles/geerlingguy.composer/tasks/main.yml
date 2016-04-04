@@ -13,8 +13,8 @@
   shell: >
     mv /tmp/composer.phar {{ composer_path }}
     creates={{ composer_path }}
-  become: true
-  become_user: root
+  sudo: true
+  sudo_user: root
 
 - name: Update Composer to latest version (if configured).
   shell: >
